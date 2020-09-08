@@ -4,10 +4,7 @@ import pandas as pd
 from time import sleep
 
 
-
 # Parameters
-name = 'laureatta_2020'
-psw = 'TTw^PnyRSQsr'
 # dilettaleotta, chiaraferragni, selenagomez, kyliejenner, kendalljenner
 # realdonaldtrump, jayalvarrez, kingjames, shawnmendes, therock
 target = 'jayalvarrez'
@@ -20,11 +17,10 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 def open_chrome():
     from webdriver_manager.chrome import ChromeDriverManager
     driver = webdriver.Chrome(ChromeDriverManager().install())
-    #driver = webdriver.Chrome()
     driver.get('https://www.instagram.com')
     return driver
 
-def login(name, psw):
+def login(driver,name, psw):
     # name
     driver.find_element_by_xpath('//*[@id="loginForm"]/div/div[1]/div/label/input').send_keys(name)
     # psw
@@ -90,15 +86,25 @@ def swipe(n_post, target, time_sleep, APP_ROOT):
         sleep(time_sleep)
     
 
-# Processi
-driver = open_chrome()
-driver.implicitly_wait(time_wait)
-login(name, psw)
-open_profile(target)
-swipe(n_swipe, target, time_sleep, APP_ROOT)
 
-# open 
-path = './output/' + target + '-' + str(n_swipe) + '.pkl'
-data = pd.read_pickle(path)
+def main(args):
+    driver = open_chrome()
+    driver.implicitly_wait(time_wait)
+    login(driver,args.user, args.password)
+    open_profile(target)
+    swipe(n_swipe, target, time_sleep, APP_ROOT)
+
+    # open 
+    path = './output/' + target + '-' + str(n_swipe) + '.pkl'
+    data = pd.read_pickle(path)
 # data.iloc[:,:].txt.apply(lambda x: len(x.split(' '))).mean()
 
+
+
+parser = argparse.ArgumentParser(description='Insta scraper params.')
+parser.add_argument('--user',type = str,default = "laureatta_2020")
+parser.add_argument('--password',type = str,required = True)
+
+args = parser.parse_args()
+
+main(args)
