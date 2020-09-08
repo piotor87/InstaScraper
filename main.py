@@ -1,11 +1,13 @@
 from selenium import webdriver
-import os
+import os,argparse
 import pandas as pd
 from time import sleep
 
+
+
 # Parameters
 name = 'laureatta_2020'
-psw = 'warhammer'
+psw = 'TTw^PnyRSQsr'
 # dilettaleotta, chiaraferragni, selenagomez, kyliejenner, kendalljenner
 # realdonaldtrump, jayalvarrez, kingjames, shawnmendes, therock
 target = 'jayalvarrez'
@@ -16,7 +18,9 @@ n_swipe = 1000
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 def open_chrome():
-    driver = webdriver.Chrome()
+    from webdriver_manager.chrome import ChromeDriverManager
+    driver = webdriver.Chrome(ChromeDriverManager().install())
+    #driver = webdriver.Chrome()
     driver.get('https://www.instagram.com')
     return driver
 
@@ -97,3 +101,4 @@ swipe(n_swipe, target, time_sleep, APP_ROOT)
 path = './output/' + target + '-' + str(n_swipe) + '.pkl'
 data = pd.read_pickle(path)
 # data.iloc[:,:].txt.apply(lambda x: len(x.split(' '))).mean()
+
